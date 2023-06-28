@@ -10,7 +10,7 @@ function ManagerNavbar(){
 
     axios.defaults.withCredentials = true;
     useEffect(() => {
-        axios.get('http://localhost:8800/staff')
+        axios.get('https://empnet.onrender.com/staff')
         .then(res => {
             if(res.data.Status === "Success") {
                 setName(res.data.name);
@@ -22,7 +22,7 @@ function ManagerNavbar(){
     }, []) 
 
     const handleLogout = () => {
-        axios.get('http://localhost:8800/logout')
+        axios.get('https://empnet.onrender.com/logout')
         .then(res => {
             if(res.data.Status === "Success") {
                 navigate('/');

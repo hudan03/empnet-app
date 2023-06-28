@@ -15,7 +15,7 @@ export const Login = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:8800/login', values)
+        axios.post('https://empnet.onrender.com/login', values)
         .then(res => {
             setAcc(res.data[0])
             if(acc.type === "admin") {

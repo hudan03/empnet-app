@@ -8,12 +8,12 @@ function AdminDashboard() {
   const [asgnCount, setAsgnCount] = useState();
 
   useEffect(() => {
-    axios.get('http://localhost:8800/staffCount')
+    axios.get('https://empnet.onrender.com/staffCount')
 		.then(res => {
 			setStaffCount(res.data[0].staff)
 		}).catch(err => console.log(err));
 
-    axios.get('http://localhost:8800/asgnCount')
+    axios.get('https://empnet.onrender.com/asgnCount')
 		.then(res => {
 			setAsgnCount(res.data[0].asgn)
 		}).catch(err => console.log(err));

@@ -13,13 +13,13 @@ function ManagerAssignments() {
   const [asgnDetails, setAsgnDetails] = useState([])
 
   const handleSubmit = (e) => {
-    axios.post('http://localhost:8800/managerAssignments', values)
+    axios.post('https://empnet.onrender.com/managerAssignments', values)
     .then(res => console.log(res))
     .catch(err => console.log(err))
   }
 
   const handleDelete = (id) => {
-    axios.delete('http://localhost:8800/managerAssignments/'+id)
+    axios.delete('https://empnet.onrender.com/managerAssignments/'+id)
     .then(res => {
         window.location.reload();
     })
@@ -27,7 +27,7 @@ function ManagerAssignments() {
   }
 
   const showDetail = (id) => {
-    axios.get('http://localhost:8800/managerAssignments/'+id)
+    axios.get('https://empnet.onrender.com/managerAssignments/'+id)
         .then(res => {
             console.log(res)
             setAsgnDetails(res.data[0])
@@ -36,13 +36,13 @@ function ManagerAssignments() {
   }
 
   const handleUpdate = (id) => {
-    axios.put('http://localhost:8800/managerAssignments/'+id, asgnDetails)
+    axios.put('https://empnet.onrender.com/managerAssignments/'+id, asgnDetails)
     .then(res => console.log(res))
     .catch(err => console.log(err));
   }
 
   useEffect(() => {
-      axios.get('http://localhost:8800/managerAssignments')
+      axios.get('https://empnet.onrender.com/managerAssignments')
       .then(res => setData(res.data))
       .catch(err => console.log(err));
     }, [])

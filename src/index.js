@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Router } from 'react-router-dom';
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
+
+if (process.env.NOVE_ENV === 'production') disableReactDevTools();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

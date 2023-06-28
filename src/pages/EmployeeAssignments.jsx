@@ -8,7 +8,7 @@ function EmployeeAssignments () {
   const [asgnDetails, setAsgnDetails] = useState([])
 
   const showDetail = (id) => {
-    axios.get('http://localhost:8800/managerAssignments/'+id)
+    axios.get('https://empnet.onrender.com/managerAssignments/'+id)
         .then(res => {
             console.log(res)
             setAsgnDetails(res.data[0])
@@ -17,7 +17,7 @@ function EmployeeAssignments () {
   }
 
   useEffect(() => {
-      axios.get('http://localhost:8800/managerAssignments')
+      axios.get('https://empnet.onrender.com/managerAssignments')
       .then(res => setData(res.data))
       .catch(err => console.log(err));
     }, [])

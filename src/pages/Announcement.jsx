@@ -11,13 +11,13 @@ function Announcement() {
   const [announcementContent, setAnnouncementContent] = useState([])
 
   const handleSubmit = (e) => {
-    axios.post('http://localhost:8800/announcements', values)
+    axios.post('https://empnet.onrender.com/announcements', values)
     .then(res => console.log(res))
     .catch(err => console.log(err))
   }
 
   const handleDelete = (id) => {
-    axios.delete('http://localhost:8800/announcements/'+id)
+    axios.delete('https://empnet.onrender.com/announcements/'+id)
     .then(res => {
         window.location.reload();
     })
@@ -25,7 +25,7 @@ function Announcement() {
   }
 
   const showDetail = (id) => {
-    axios.get('http://localhost:8800/announcements/'+id)
+    axios.get('https://empnet.onrender.com/announcements/'+id)
         .then(res => {
             console.log(res)
             setAnnouncementContent(res.data[0])
@@ -34,13 +34,13 @@ function Announcement() {
   }
 
   const handleUpdate = (id) => {
-    axios.put('http://localhost:8800/announcements/'+id, announcementContent)
+    axios.put('https://empnet.onrender.com/announcements/'+id, announcementContent)
     .then(res => console.log(res))
     .catch(err => console.log(err));
 }
 
   useEffect(() => {
-    axios.get('http://localhost:8800/announcements')
+    axios.get('https://empnet.onrender.com/announcements')
     .then(res => setData(res.data))
     .catch(err => console.log(err));
   }, [])

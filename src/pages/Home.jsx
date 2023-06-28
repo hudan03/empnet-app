@@ -6,7 +6,7 @@ function Home() {
     const [data, setData] = useState([]) 
 
     useEffect(() => {
-        axios.get('http://localhost:8800/home')
+        axios.get('https://empnet.onrender.com/home')
         .then(res => setData(res.data))
         .catch(err => console.log(err));
       }, [])

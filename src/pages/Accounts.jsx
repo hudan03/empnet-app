@@ -19,13 +19,13 @@ function Accounts() {
   ]
 
   const handleSubmit = (e) => {
-    axios.post('http://localhost:8800/accounts', values)
+    axios.post('https://empnet.onrender.com/accounts', values)
     .then(res => console.log(res))
     .catch(err => console.log(err))
   }
 
   const handleDelete = (id) => {
-    axios.delete('http://localhost:8800/accounts/'+id)
+    axios.delete('https://empnet.onrender.com/accounts/'+id)
     .then(res => {
         window.location.reload();
     })
@@ -33,7 +33,7 @@ function Accounts() {
   }
 
   const showDetail = (id) => {
-    axios.get('http://localhost:8800/accounts/'+id)
+    axios.get('https://empnet.onrender.com/accounts/'+id)
         .then(res => {
             console.log(res)
             setStaffDetails(res.data[0])
@@ -42,13 +42,13 @@ function Accounts() {
   }
 
   const handleUpdate = (id) => {
-    axios.put('http://localhost:8800/accounts/'+id, staffDetails)
+    axios.put('https://empnet.onrender.com/accounts/'+id, staffDetails)
     .then(res => console.log(res))
     .catch(err => console.log(err));
 }
 
   useEffect(() => {
-    axios.get('http://localhost:8800/accounts')
+    axios.get('https://empnet.onrender.com/accounts')
     .then(res => setData(res.data))
     .catch(err => console.log(err));
   }, [])
