@@ -4,34 +4,34 @@ import './styles/navstyles.css';
 import axios from 'axios';
 
 function Navbar() {
-    const [name, setName] = useState('')
-    const navigate = useNavigate();
+    // const [name, setName] = useState('')
+    // const navigate = useNavigate();
 
-    axios.defaults.withCredentials = true;
-    useEffect(() => {
-        axios.get('https://empnet.onrender.com/staff')
-        .then(res => {
-            if(res.data.Status === "Success") {
-                setName(res.data.name);
-            } else {
-                navigate('/');
-            }
-        })
-        .catch(err => console.log(err))
-    }, []) 
+    // axios.defaults.withCredentials = true;
+    // useEffect(() => {
+    //     axios.get('https://empnet.onrender.com/staff')
+    //     .then(res => {
+    //         if(res.data.Status === "Success") {
+    //             setName(res.data.name);
+    //         } else {
+    //             navigate('/');
+    //         }
+    //     })
+    //     .catch(err => console.log(err))
+    // }, []) 
 
-    const handleLogout = () => {
-        axios.get('https://empnet.onrender.com/logout')
-        .then(res => {
-            if(res.data.Status === "Success") {
-                navigate('/');
-            } else {
-                alert("error");
-            }
+    // const handleLogout = () => {
+    //     axios.get('https://empnet.onrender.com/logout')
+    //     .then(res => {
+    //         if(res.data.Status === "Success") {
+    //             navigate('/');
+    //         } else {
+    //             alert("error");
+    //         }
             
-        })
-        .catch(err => console.log(err))
-    }
+    //     })
+    //     .catch(err => console.log(err))
+    // }
 
         return (
             <>
