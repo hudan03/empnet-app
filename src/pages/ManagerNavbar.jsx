@@ -79,7 +79,7 @@ function ManagerNavbar(){
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#">Profile</a></li>
                                     <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" onClick={handleLogout} href="#">Logout</a></li>
+                                    <li><a class="dropdown-item" href="#">Logout</a></li>
                                 </ul>
                             </div>
                         </div>
