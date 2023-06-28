@@ -1,0 +1,13 @@
+.data-container {
+    border-radius: 10px;
+    min-height: 150px;
+    color: white;
+}
+
+#acc {
+    background: #E57C23;
+}
+
+#asgn {
+    background: #E8AA42;
+}

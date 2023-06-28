@@ -1,0 +1,40 @@
+body {
+    background: #eee;
+}
+
+.nav-container {
+    min-height: 100px;
+    min-width: 100%;
+    background: #025464;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+}
+
+.image {
+    height: auto;
+    max-width: 150px;
+}
+
+#navbar-item li {
+    list-style: none;
+    position: relative;
+}
+
+#navbar-item li a {
+    font-weight: 600;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+#navbar-item li a:hover,  #navbar-item  .active li a{
+    color: #9DB2BF;
+}
+
+#navbar-item li a:hover::after {
+    content: "";
+    width: 30%;
+    height: 2px;
+    background: #9DB2BF;
+    position: absolute;
+    bottom: -4px;
+    left: 15px;
+}

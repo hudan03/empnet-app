@@ -1,0 +1,33 @@
+body {
+    background: #eee;
+}
+
+.main-container {
+    background: #025464;
+    position: fixed;
+}
+
+#links {
+    text-decoration: none!important;
+}
+
+.sidebar li {
+    position: relative;
+}
+
+.sidebar li a {
+    color: #F8F1F1;
+}
+
+.sidebar .active li {
+    background: #eee;
+    border-radius: 8px;
+}
+
+.sidebar .active li a {
+    color: #025464;
+}
+
+.sidebar li a:hover {
+    color: #9DB2BF;
+}
