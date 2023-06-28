@@ -70,7 +70,7 @@ function Navbar() {
 
                             <div class="btn-group px-3">
                                 <button type="button" class="btn btn-light fs-5">
-                                    <i class="bi bi-person-circle pe-3 fs-5"></i>{name}
+                                    <i class="bi bi-person-circle pe-3 fs-5"></i>test
                                 </button>
                                 <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="visually-hidden">Toggle Dropdown</span>
@@ -78,7 +78,7 @@ function Navbar() {
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="#">Profile</a></li>
                                     <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" onClick={handleLogout} href="#">Logout</a></li>
+                                    <li><a class="dropdown-item" href="#">Logout</a></li>
                                 </ul>
                             </div>
                         </div>

@@ -82,7 +82,7 @@ function AdminNavbar() {
                             <div class="nav-item p-2">
                                 <a class="text-decoration-none p-1 text-white">
                                     <i class="bi bi-box-arrow-left me-3 fs-5"></i>
-                                    <span onClick={handleLogout} class="fs-5">Logout</span>
+                                    <span class="fs-5">Logout</span>
                                 </a>
                             </div>
                         </div>
