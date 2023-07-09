@@ -14,13 +14,13 @@ function EmployeeAssignments () {
   const [record, setRecord] = useState([]);
 
   const getAssignments = async () => {
-    const response = await axios.get('http://localhost:8800/asgn');
+    const response = await axios.get('https://empnet-api.onrender.com/asgn');
     setData(response.data);
   }
 
   const showDetail = async (asgnId) => {
     try {
-        const response = await axios.get(`http://localhost:8800/asgn/${asgnId}`);
+        const response = await axios.get(`https://empnet-api.onrender.com/asgn/${asgnId}`);
         setRecord(response.data);
     } catch (error) {
         if (error.response) {

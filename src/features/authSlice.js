@@ -11,7 +11,7 @@ const initialState = {
 
 export const LoginUser = createAsyncThunk("user/LoginUser", async(user, thunkAPI) => {
     try {
-        const response = await axios.post('http://localhost:8800/login', {
+        const response = await axios.post('https://empnet-api.onrender.com/login', {
             email: user.email,
             password: user.password
         });
@@ -26,7 +26,7 @@ export const LoginUser = createAsyncThunk("user/LoginUser", async(user, thunkAPI
 
 export const getActiveUser = createAsyncThunk("user/getActiveUser", async(_, thunkAPI) => {
     try {
-        const response = await axios.get('http://localhost:8800/activeUser');
+        const response = await axios.get('https://empnet-api.onrender.com/activeUser');
         return response.data;
     } catch (error) {
         if(error.response) {
@@ -37,7 +37,7 @@ export const getActiveUser = createAsyncThunk("user/getActiveUser", async(_, thu
 });
 
 export const LogoutUser = createAsyncThunk("user/LogoutUser", async() => {
-    await axios.delete('http://localhost:8800/logout');
+    await axios.delete('https://empnet-api.onrender.com/logout');
 });
 
 export const authSlice = createSlice({

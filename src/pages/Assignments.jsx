@@ -13,13 +13,13 @@ function Assignments() {
   const [record, setRecord] = useState([]);
 
   const getAssignments = async () => {
-    const response = await axios.get('http://localhost:8800/asgn');
+    const response = await axios.get('https://empnet-api.onrender.com/asgn');
     setData(response.data);
   }
 
   const showDetail = async (asgnId) => {
     try {
-        const response = await axios.get(`http://localhost:8800/asgn/${asgnId}`);
+        const response = await axios.get(`https://empnet-api.onrender.com/asgn/${asgnId}`);
         setRecord(response.data);
     } catch (error) {
         if (error.response) {
@@ -29,13 +29,13 @@ function Assignments() {
   }
 
   const handleDelete = async (asgnId) => {
-    await axios.delete(`http://localhost:8800/asgn/${asgnId}`);
+    await axios.delete(`https://empnet-api.onrender.com/asgn/${asgnId}`);
     getAssignments();
   }
 
   const handleSubmit = async (e) => {
     try {
-        await axios.post('http://localhost:8800/asgn/', values);
+        await axios.post('https://empnet-api.onrender.com/asgn/', values);
     } catch (error) {
         if(error.response) {
             setMsg(error.response.data.msg);
@@ -45,7 +45,7 @@ function Assignments() {
 
   const handleUpdate = async (userId) => {
     try {
-      await axios.patch(`http://localhost:8800/asgn/${userId}`, record);
+      await axios.patch(`https://empnet-api.onrender.com/asgn/${userId}`, record);
     } catch (error) {
       if (error.response) {
         setMsg(error.response.data.msg);

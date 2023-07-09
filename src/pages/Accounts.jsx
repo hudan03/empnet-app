@@ -26,13 +26,13 @@ function Accounts() {
   ]
 
   const getUsers = async () => {
-    const response = await axios.get('http://localhost:8800/users');
+    const response = await axios.get('https://empnet-api.onrender.com/users');
     setData(response.data);
   }
 
   const showDetail = async (userId) => {
     try {
-        const response = await axios.get(`http://localhost:8800/users/${userId}`);
+        const response = await axios.get(`https://empnet-api.onrender.com/users/${userId}`);
         setStaffUUID(response.data.uuid);
         setStaffName(response.data.name);
         setStaffEmail(response.data.email);
@@ -45,13 +45,13 @@ function Accounts() {
   }
 
   const handleDelete = async (userId) => {
-    await axios.delete(`http://localhost:8800/users/${userId}`);
+    await axios.delete(`https://empnet-api.onrender.com/users/${userId}`);
     getUsers();
   }
 
   const handleSubmit = async (e) => {
     try {
-        await axios.post('http://localhost:8800/users/', values);
+        await axios.post('https://empnet-api.onrender.com/users/', values);
     } catch (error) {
         if(error.response) {
             setMsg(error.response.data.msg);
@@ -61,7 +61,7 @@ function Accounts() {
 
   const handleUpdate = async (userId) => {
     try {
-      await axios.patch(`http://localhost:8800/users/${userId}`, {
+      await axios.patch(`https://empnet-api.onrender.com/users/${userId}`, {
         name: staffName,
         email: staffEmail,
         password: staffPassword,
