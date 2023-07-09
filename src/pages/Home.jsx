@@ -3,13 +3,13 @@ import './styles/staff.css';
 import axios from 'axios'
 
 function Home() {
-    const [data, setData] = useState([]) 
+    // const [data, setData] = useState([]) 
 
-    useEffect(() => {
-        axios.get('https://empnet.onrender.com/home')
-        .then(res => setData(res.data))
-        .catch(err => console.log(err));
-      }, [])
+    // useEffect(() => {
+    //     axios.get('http://localhost:8800/home')
+    //     .then(res => setData(res.data))
+    //     .catch(err => console.log(err));
+    //   }, [])
 
     return (
         <>
@@ -17,7 +17,7 @@ function Home() {
                 <div class="w-100 bg-white rounded p-5">
                     <h2 class="ms-4 mb-5">Welcome to the system</h2>
 
-                    {data.map((news, index) => {
+                    {/* {data.map((news, index) => {
                         return (
                             <>
                                 <div key={index}>
@@ -28,7 +28,7 @@ function Home() {
                                 </div>
                             </>
                         )
-                    })}
+                    })} */}
                 </div>
             </div>
         </>

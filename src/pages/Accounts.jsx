@@ -1,5 +1,5 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import './styles/admin.css';
 
 function Accounts() {
@@ -8,9 +8,16 @@ function Accounts() {
     name: '',
     email: '',
     password: '',
-    type: ''
+    confPassword: '',
+    role: ''
   })
-  const [staffDetails, setStaffDetails] = useState([])
+  const [msg, setMsg] = useState("");
+  const [staffName, setStaffName] = useState("");
+  const [staffEmail, setStaffEmail] = useState("");
+  const [staffPassword, setStaffPassword] = useState("");
+  const [staffConfPassword, setStaffConfPassword] = useState("");
+  const [staffRole, setStaffRole] = useState("");
+  const [staffUUID, setStaffUUID] = useState("");
 
   const options = [
     {label: "Admin", value: "admin"},
@@ -18,39 +25,58 @@ function Accounts() {
     {label: "Employee", value: "employee"},
   ]
 
-  const handleSubmit = (e) => {
-    axios.post('https://empnet.onrender.com/accounts', values)
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
+  const getUsers = async () => {
+    const response = await axios.get('http://localhost:8800/users');
+    setData(response.data);
   }
 
-  const handleDelete = (id) => {
-    axios.delete('https://empnet.onrender.com/accounts/'+id)
-    .then(res => {
-        window.location.reload();
-    })
-    .catch(err => console.log(err))
+  const showDetail = async (userId) => {
+    try {
+        const response = await axios.get(`http://localhost:8800/users/${userId}`);
+        setStaffUUID(response.data.uuid);
+        setStaffName(response.data.name);
+        setStaffEmail(response.data.email);
+        setStaffRole(response.data.role);
+    } catch (error) {
+        if (error.response) {
+          setMsg(error.response.data.msg);
+        }
+    }
   }
 
-  const showDetail = (id) => {
-    axios.get('https://empnet.onrender.com/accounts/'+id)
-        .then(res => {
-            console.log(res)
-            setStaffDetails(res.data[0])
-        })
-        .catch(err => console.log(err))
+  const handleDelete = async (userId) => {
+    await axios.delete(`http://localhost:8800/users/${userId}`);
+    getUsers();
   }
 
-  const handleUpdate = (id) => {
-    axios.put('https://empnet.onrender.com/accounts/'+id, staffDetails)
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
-}
+  const handleSubmit = async (e) => {
+    try {
+        await axios.post('http://localhost:8800/users/', values);
+    } catch (error) {
+        if(error.response) {
+            setMsg(error.response.data.msg);
+        }
+    }
+  }
+
+  const handleUpdate = async (userId) => {
+    try {
+      await axios.patch(`http://localhost:8800/users/${userId}`, {
+        name: staffName,
+        email: staffEmail,
+        password: staffPassword,
+        confPassword: staffConfPassword,
+        role: staffRole,
+      });
+    } catch (error) {
+      if (error.response) {
+        setMsg(error.response.data.msg);
+      }
+    }
+  };
 
   useEffect(() => {
-    axios.get('https://empnet.onrender.com/accounts')
-    .then(res => setData(res.data))
-    .catch(err => console.log(err));
+    getUsers();
   }, [])
 
   return (
@@ -66,7 +92,7 @@ function Accounts() {
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Account Type</th>
@@ -75,20 +101,24 @@ function Accounts() {
                 </thead>
                 <tbody class="table-group-divider">
                     {data.map((staff, index) => {
-                        return <tr key={index}>
-                            <td>{staff.id}</td>
+                        return <tr key={staff.uuid}>
+                            <td>{index + 1}</td>
                             <td>{staff.name}</td>
                             <td>{staff.email}</td>
-                            <td>{staff.type}</td>
+                            <td>{staff.role}</td>
                             <td>
-                                <button class="btn btn-sm btn-primary me-1" onClick={() => showDetail(staff.id)} data-bs-toggle="modal" data-bs-target="#editAccount"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="btn btn-sm btn-danger me-1" onClick={() => handleDelete(staff.id)}><i class="fa-solid fa-trash"></i></button>
+                                {/*Handle edit*/}
+                                <button class="btn btn-sm btn-primary me-1" onClick={() => showDetail(staff.uuid)} data-bs-toggle="modal" data-bs-target="#editAccount"><i class="fa-solid fa-pen-to-square"></i></button>
+                                {/*Handle delete*/}
+                                <button class="btn btn-sm btn-danger me-1" onClick={() => handleDelete(staff.uuid)}><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     })}
                 </tbody>
             </table>
         </div>
+
+        {/*Modal functions to add accounts*/}
 
         <div class="modal fade" id="addAccount" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -98,6 +128,7 @@ function Accounts() {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form onSubmit={handleSubmit}>
+                        <p>{msg}</p>
                         <div class="modal-body">
                             <div class="mb-2">
                                 <label htmlFor="">Name</label>
@@ -115,8 +146,13 @@ function Accounts() {
                                 onChange={e => setValues({...values, password: e.target.value})}/>
                             </div> 
                             <div class="mb-2">
-                                <label htmlFor="">Account Type</label>
-                                <select class="form-select" onChange={e => setValues({...values, type: e.target.value})}>
+                                <label htmlFor="">Confirm Password</label>
+                                <input type="text" placeholder="Confirm Password" class="form-control" 
+                                onChange={e => setValues({...values, confPassword: e.target.value})}/>
+                            </div> 
+                            <div class="mb-2">
+                                <label htmlFor="">Account Role</label>
+                                <select class="form-select" onChange={e => setValues({...values, role: e.target.value})}>
                                     {options.map(option => (
                                         <option value={option.value}>{option.label}</option>
                                     ))}
@@ -132,6 +168,9 @@ function Accounts() {
             </div>
         </div>
 
+
+        {/*Modal functions to edit accounts*/}
+
         <div class="modal fade" id="editAccount" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -139,27 +178,32 @@ function Accounts() {
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Editing Accounts</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form onSubmit={() => handleUpdate(staffDetails.id)}>
+                    <form onSubmit={() => handleUpdate(staffUUID)}>
                         <div class="modal-body">
                             <div class="mb-2">
                                 <label htmlFor="">Name</label>
-                                <input type="text" value={staffDetails.name} class="form-control" 
-                                onChange={e => setStaffDetails({...staffDetails, name: e.target.value})}/>
+                                <input type="text" value={staffName} class="form-control" 
+                                onChange={(e) => setStaffName(e.target.value)}/>
                             </div>
                             <div class="mb-2">
                                 <label htmlFor="">Email</label>
-                                <input type="email" value={staffDetails.email} class="form-control" 
-                                onChange={e => setStaffDetails({...staffDetails, email: e.target.value})}/>
+                                <input type="email" value={staffEmail} class="form-control" 
+                                onChange={(e) => setStaffEmail(e.target.value)}/>
                             </div>
                             <div class="mb-2">
                                 <label htmlFor="">Password</label>
-                                <input type="text" value={staffDetails.password} class="form-control" 
-                                onChange={e => setStaffDetails({...staffDetails, password: e.target.value})}/>
+                                <input type="text" placeholder="********" class="form-control" 
+                                onChange={(e) => setStaffPassword(e.target.value)}/>
+                            </div> 
+                            <div class="mb-2">
+                                <label htmlFor="">Confirm Password</label>
+                                <input type="text" placeholder="********" class="form-control" 
+                                onChange={(e) => setStaffConfPassword(e.target.value)}/>
                             </div> 
                             <div class="mb-2">
                                 <label htmlFor="">Account Type</label>
-                                <select class="form-select" value={staffDetails.type}
-                                onChange={e => setStaffDetails({...staffDetails, type: e.target.value})}>
+                                <select class="form-select" value={staffRole}
+                                onChange={(e) => setStaffRole(e.target.value)}>
                                     {options.map(option => (
                                         <option value={option.value}>{option.label}</option>
                                     ))}

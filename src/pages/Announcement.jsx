@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import './styles/admin.css';
 
 function Announcement() {
@@ -8,16 +9,20 @@ function Announcement() {
     title: '',
     content: ''
   })
+
+
   const [announcementContent, setAnnouncementContent] = useState([])
 
+  // Handle add announcement function
   const handleSubmit = (e) => {
-    axios.post('https://empnet.onrender.com/announcements', values)
+    axios.post('http://localhost:8800/announcements', values)
     .then(res => console.log(res))
     .catch(err => console.log(err))
   }
 
+  // Handle delete announcement hook
   const handleDelete = (id) => {
-    axios.delete('https://empnet.onrender.com/announcements/'+id)
+    axios.delete('http://localhost:8800/announcements/'+id)
     .then(res => {
         window.location.reload();
     })
@@ -25,7 +30,7 @@ function Announcement() {
   }
 
   const showDetail = (id) => {
-    axios.get('https://empnet.onrender.com/announcements/'+id)
+    axios.get('http://localhost:8800/announcements/'+id)
         .then(res => {
             console.log(res)
             setAnnouncementContent(res.data[0])
@@ -33,18 +38,21 @@ function Announcement() {
         .catch(err => console.log(err))
   }
 
+  //handle update announcement hook
   const handleUpdate = (id) => {
-    axios.put('https://empnet.onrender.com/announcements/'+id, announcementContent)
+    axios.put('http://localhost:8800/announcements/'+id, announcementContent)
     .then(res => console.log(res))
     .catch(err => console.log(err));
 }
 
+  // Handle show announcement hook
   useEffect(() => {
-    axios.get('https://empnet.onrender.com/announcements')
+    axios.get('http://localhost:8800/announcements')
     .then(res => setData(res.data))
     .catch(err => console.log(err));
   }, [])
 
+  // Admin show announcements function
   return (
     <>
       <div class="admin-container d-flex vh-100 justify-content-center">
@@ -69,7 +77,9 @@ function Announcement() {
                             <td>{annc.id}</td>
                             <td>{annc.title}</td>
                             <td>
+                                {/*Handle edit*/}
                                 <button class="btn btn-sm btn-primary me-1" onClick={() => showDetail(annc.id)} data-bs-toggle="modal" data-bs-target="#editAnnouncement"><i class="fa-solid fa-pen-to-square"></i></button>
+                                {/*Handle delete*/}
                                 <button class="btn btn-sm btn-danger me-1" onClick={() => handleDelete(annc.id)}><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
@@ -78,6 +88,7 @@ function Announcement() {
             </table>
         </div>
 
+        {/*Modal function to add new announcement*/}
         <div class="modal fade" id="addAnnouncement" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -107,6 +118,8 @@ function Announcement() {
             </div>
         </div>
 
+
+        {/*Modal function to edit announcement*/}
         <div class="modal fade" id="editAnnouncement" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

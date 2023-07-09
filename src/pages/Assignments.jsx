@@ -5,51 +5,59 @@ import './styles/admin.css';
 function Assignments() {
   const [data, setData] = useState([]) 
   const [values, setValues] = useState({
-    client: '',
-    machinetype: '',
+    clientName: '',
+    machineType: '',
     capacity: '',
-    repair: '',
-    reinforce: '',
-    manufacture: '',
-    resize: ''
   })
-  const [asgnDetails, setAsgnDetails] = useState([])
+  const [msg, setMsg] = useState("");
+  const [record, setRecord] = useState([]);
 
-  const handleSubmit = (e) => {
-    axios.post('https://empnet.onrender.com/assignments', values)
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
+  const getAssignments = async () => {
+    const response = await axios.get('http://localhost:8800/asgn');
+    setData(response.data);
   }
 
-  const handleDelete = (id) => {
-    axios.delete('https://empnet.onrender.com/assignments/'+id)
-    .then(res => {
-        window.location.reload();
-    })
-    .catch(err => console.log(err))
+  const showDetail = async (asgnId) => {
+    try {
+        const response = await axios.get(`http://localhost:8800/asgn/${asgnId}`);
+        setRecord(response.data);
+    } catch (error) {
+        if (error.response) {
+          setMsg(error.response.data.msg);
+        }
+    }
   }
 
-  const showDetail = (id) => {
-    axios.get('https://empnet.onrender.com/assignments/'+id)
-        .then(res => {
-            console.log(res)
-            setAsgnDetails(res.data[0])
-        })
-        .catch(err => console.log(err))
+  const handleDelete = async (asgnId) => {
+    await axios.delete(`http://localhost:8800/asgn/${asgnId}`);
+    getAssignments();
   }
 
-  const handleUpdate = (id) => {
-    axios.put('https://empnet.onrender.com/assignments/'+id, asgnDetails)
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
+  const handleSubmit = async (e) => {
+    try {
+        await axios.post('http://localhost:8800/asgn/', values);
+    } catch (error) {
+        if(error.response) {
+            setMsg(error.response.data.msg);
+        }
+    }
   }
+
+  const handleUpdate = async (userId) => {
+    try {
+      await axios.patch(`http://localhost:8800/asgn/${userId}`, record);
+    } catch (error) {
+      if (error.response) {
+        setMsg(error.response.data.msg);
+      }
+    }
+  };
 
   useEffect(() => {
-    axios.get('https://empnet.onrender.com/assignments')
-    .then(res => setData(res.data))
-    .catch(err => console.log(err));
+    getAssignments();
   }, [])
 
+  // Show assignments admin view
   return (
     <>
       <div class="admin-container d-flex vh-100 justify-content-center">
@@ -63,31 +71,37 @@ function Assignments() {
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Client Name</th>
                         <th>Machine Type</th>
                         <th>Machine Capacity</th>
                         <th>Jobset</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
                     {data.map((asgn, index) => {
-                        return <tr key={index}>
-                            <td>{asgn.id}</td>
-                            <td>{asgn.client}</td>
-                            <td>{asgn.machinetype}</td>
+                        return <tr key={asgn.uuid}>
+                            <td>{index + 1}</td>
+                            <td>{asgn.clientName}</td>
+                            <td>{asgn.machineType}</td>
                             <td>{asgn.capacity}</td>
-                            <td>{asgn.jobset}</td>
+                            <td></td>
+                            <td>Incomplete</td>
                             <td>
-                                <button class="btn btn-sm btn-primary me-1" onClick={() => showDetail(asgn.id)} data-bs-toggle="modal" data-bs-target="#editAccount"><i class="fa-solid fa-pen-to-square"></i></button>
-                                <button class="btn btn-sm btn-danger me-1" onClick={() => handleDelete(asgn.id)}><i class="fa-solid fa-trash"></i></button>
+                                {/*Handle edit*/}
+                                <button class="btn btn-sm btn-primary me-1" onClick={() => showDetail(asgn.uuid)} data-bs-toggle="modal" data-bs-target="#editAccount"><i class="fa-solid fa-pen-to-square"></i></button>
+                                {/*Handle delete*/}
+                                <button class="btn btn-sm btn-danger me-1" onClick={() => handleDelete(asgn.uuid)}><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     })}
                 </tbody>
             </table>
         </div>
+
+        {/*Modal functions to add accounts*/}
 
         <div class="modal fade" id="addAsgn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -101,17 +115,17 @@ function Assignments() {
                             <div class="mb-2">
                                 <label htmlFor="">Client Name</label>
                                 <input type="text" placeholder="Enter Client Name" class="form-control" 
-                                onChange={e => setValues({...values, client: e.target.value})}/>
+                                onChange={e => setValues({...values, clientName: e.target.value})} />
                             </div>
                             <div class="mb-2">
                                 <label htmlFor="">Machine Type</label>
                                 <input type="text" placeholder="Enter Machine Type" class="form-control" 
-                                onChange={e => setValues({...values, machinetype: e.target.value})}/>
+                                onChange={e => setValues({...values, machineType: e.target.value})} />
                             </div>
                             <div class="mb-2">
                                 <label htmlFor="">Machine Capacity</label>
                                 <input type="text" placeholder="Enter Machine Capacity" class="form-control" 
-                                onChange={e => setValues({...values, capacity: e.target.value})}/>
+                                onChange={e => setValues({...values, capacity: e.target.value})} />
                             </div> 
                             <div class="mb-2">
                                 <label htmlFor="">Jobset</label>
@@ -150,6 +164,9 @@ function Assignments() {
             </div>
         </div>
 
+
+        {/*Modal functions to edit assignments*/}
+
         <div class="modal fade" id="editAccount" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -157,28 +174,61 @@ function Assignments() {
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Editing Accounts</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form onSubmit={() => handleUpdate(asgnDetails.id)}>
+                    <form onSubmit={() => handleUpdate(record.uuid)}>
                         <div class="modal-body">
                             <div class="mb-2">
                                 <label htmlFor="">Client Name</label>
-                                <input type="text" value={asgnDetails.client} class="form-control" 
-                                onChange={e => setAsgnDetails({...asgnDetails, client: e.target.value})}/>
+                                <input type="text" value={record.clientName} class="form-control" 
+                                onChange={e => setRecord({...record, clientName: e.target.value})}/>
                             </div>
                             <div class="mb-2">
                                 <label htmlFor="">Machine Type</label>
-                                <input type="text" value={asgnDetails.machinetype} class="form-control" 
-                                onChange={e => setAsgnDetails({...asgnDetails, machinetype: e.target.value})}/>
+                                <input type="text" value={record.machineType} class="form-control" 
+                                onChange={e => setRecord({...record, machineType: e.target.value})}/>
                             </div>
                             <div class="mb-2">
                                 <label htmlFor="">Machine Capacity</label>
-                                <input type="text" value={asgnDetails.capacity} class="form-control" 
-                                onChange={e => setAsgnDetails({...asgnDetails, capacity: e.target.value})}/>
+                                <input type="text" value={record.capacity} class="form-control" 
+                                onChange={e => setRecord({...record, capacity: e.target.value})}/>
                             </div> 
-                            <div class="mb-2">
+                            {/* <div class="mb-2">
                                 <label htmlFor="">Jobset</label>
-                                <input type="text" value={asgnDetails.jobset} class="form-control" 
-                                onChange={e => setAsgnDetails({...asgnDetails, jobset: e.target.value})}/>
-                            </div>
+                                {asgnDetails.repair == "1" ? (
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" />
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                      Repair
+                                    </label>
+                                  </div>
+                                ) : null}
+                                {asgnDetails.reinforce == "1" ? (
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" />
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                      Reinforce
+                                    </label>
+                                  </div>
+                                ) : null}
+                                {asgnDetails.manufacture == "1" ? (
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" />
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                      Manufacture
+                                    </label>
+                                  </div>
+                                ) : null}
+                                {asgnDetails.resize == "1" ? (
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" />
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                      Resize
+                                    </label>
+                                  </div>
+                                ) : null}
+                                {(asgnDetails.repair == null && asgnDetails.manufacture == null && asgnDetails.resize == null && asgnDetails.reinforce == null) ? (
+                                  <div>No job found</div>
+                                ) : null}
+                            </div> */}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

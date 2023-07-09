@@ -2,6 +2,7 @@
     border-radius: 10px;
     min-height: 150px;
     color: white;
+    background-color: white;
 }
 
 #acc {
@@ -10,4 +11,8 @@
 
 #asgn {
     background: #E8AA42;
+}
+
+#job {
+    background: #025464;
 }

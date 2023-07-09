@@ -1,61 +1,78 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { LoginUser, reset } from "../features/authSlice.js";
 import axios from 'axios';
 
-export const Login = (props) => {
-    const [values, setValues] = useState({
-        email: '',
-        password: ''
-    })
-    // const [acc, setAcc] = useState([])
+const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-    // const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    // axios.defaults.withCredentials = true;
+    const {user, isError, isSuccess, isLoading, message} = useSelector(
+        (state) => state.auth
+    );
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     axios.post('https://empnet.onrender.com/login', values)
-    //     .then(res => {
-    //         setAcc(res.data[0])
-    //         if(acc.type === "admin") {
-    //             navigate('/admin');
-    //         } 
-    //         else if(acc.type === "manager") {
-    //             navigate('/managerHome');
-    //         }
-    //         else if(acc.type === "employee") {
-    //             navigate('/home');
-    //         }
-    //         else {
-    //             alert(res.data.Message);
-    //         }
-    //     })
-    //     .catch(err => console.log(err));
-    // }
+    useEffect(() => {
+        if(user || isSuccess) {
+            if(user && user.role === "admin") {
+                navigate("/admin")
+            }
+            if(user && user.role === "manager") {
+                navigate("/managerHome")
+            }
+            if(user && user.role === "employee") {
+                navigate("/home")
+            }
+        }
+        dispatch(reset());
+    }, [user, isSuccess, dispatch. navigate]);
+
+    const Auth = (e) => {
+        e.preventDefault();
+        dispatch(LoginUser({email, password}));
+        // axios.post('http://localhost:8800/login', values)
+        // .then(res => {
+        //     if(res.data.Status === "Success") {
+        //         navigate('/admin')
+        //     } else {
+        //         alert(res.data.Error);
+        //     }
+        // })
+        // .catch(err => console.log(err));
+    }
+
+    // Login Form and Styling
 
     return (
         <div className="login-page">
             <div className="login-container">
                 <div className="login-form-container">
                     <h1> EMPnet System Login </h1>
-                    <form action='' className="login-form">
+                    <form action='' onSubmit={Auth} className="login-form">
+                        {isError && <p>{message}</p>}
                         <div className="form-item">
                             <label for="email">Email</label>
-                            <input onChange={e => setValues({...values, email: e.target.value})} className="form-elements"
-                                type="email" placeholder="youremail@email.com" id="email" name="email" />
+                            <input onChange={(e) => setEmail(e.target.value)} className="form-elements"
+                                value={email} type="email" placeholder="youremail@email.com" id="email" name="email" />
                         </div>
 
                         <div className="form-item">
                             <label for="password">Password</label>
-                            <input onChange={e => setValues({...values, password: e.target.value})} className="form-elements"
-                                type="password" placeholder="Your Password" id="password" name="password" />
+                            <input onChange={(e) => setPassword(e.target.value)} className="form-elements"
+                                value={password} type="password" placeholder="Your Password" id="password" name="password" />
                         </div>
 
-                        <button className="login-button" type="submit">Login</button>
+                        <button className="login-button" type="submit">
+                            {isLoading ? 'Loading...' : 'Login'}
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
+
+export default Login;
